@@ -290,7 +290,7 @@ const Asteroid = ({
             const angle = (i / numPoints) * Math.PI * 2;
             const x = semiMajorAxis * 20 * Math.cos(angle);
             const y = semiMinorAxis * 20 * Math.sin(angle);
-            const z = y * 2 * Math.sin(inclination) * (randomZFactor || 1);
+            const z = y * Math.sin(inclination);
 
             if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
                 points.push(new Vector3(x, y, z));

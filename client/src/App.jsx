@@ -10,6 +10,8 @@ import { IoPlay } from "react-icons/io5";
 import { IoPlayForward } from "react-icons/io5";
 import { FaPause } from "react-icons/fa6";
 import { LuInfo } from "react-icons/lu";
+import { IoSearchSharp } from "react-icons/io5";
+import { IoIosMenu } from "react-icons/io";
 const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setShowPlanetLabels, showAsteroidLabels, setShowAsteroidLabels, handleLayerToggle, setShowPlanetTrails, showPlanetTrails, showAsteroidTrails, setShowAsteroidTrails }) => {
   return (
     <div className="absolute right-0 z-50 flex flex-col items-center w-64 h-full p-4 text-white">
@@ -63,17 +65,42 @@ const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setSho
     </div>
   );
 };
-const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass, onBack, onPass, info, setInfo }) => {
-
+const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass, onBack, onPass, info, setInfo}) => {
+  const [IsMenuOpen, setMenuOpen] = useState(false);
   const handlePlayToggle = () => {
     setOnPlay(prev => !prev);
   };
   const handleLayerToggle = () => {
     setShowLayerPanel(prev => !prev);
   };
-
+  console.log(IsMenuOpen)
   return (
     <>
+      <header className="fixed top-0 z-50 flex items-center justify-between w-full px-6 py-2 text-white md:px-32">
+        <div className='flex items-center justify-center gap-2 font-bold cursor-pointer hover:scale-110'>
+        <img src={'https://cdn.discordapp.com/attachments/749326094800519179/1292225019279310969/DALLE-2024-10-05-13.28.png?ex=6702f5d4&is=6701a454&hm=31109079e112cccc619808a8e4ce17380aef86245ff744c8c92593bb4c420c61&'} alt="Logo" className='w-16 transition-all' />
+        Eyes on Stars
+        </div>
+        <ul className='items-center hidden gap-12 text-base font-semibold xl:flex'>
+          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray'>Learn</li>
+          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray'>Asteroid Watch</li>
+          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray'>Filters</li>
+        </ul>
+        <div className='relative items-center justify-center hidden gap-3 md:flex'>
+          <IoSearchSharp className='text-2xl ' />
+          <input type="text" placeholder='search....' className='py-2 pl-4 text-gray-800 border border-black rounded-xl focus:bg-slate-100 focus:outline-none' />
+        </div>
+
+        <div
+          className='text-5xl cursor-pointer xl:hidden' >
+          <IoIosMenu className='text-5xl cursor-pointer xl:hidden' onClick={() => setMenuOpen(prev => !prev)} />
+          <div className={`absolute xl:hidden top-24 left-0 w-full  flex flex-col items-center gap-6 font-semibold text-lg transform transition-transform ${IsMenuOpen ? "opacity-100" : "hidden"}`}>
+            <li className='w-full p-4 text-center list-none transition-all cursor-pointer hover:bg-black hover:text-gray'>Learn</li>
+            <li className='w-full p-4 text-center list-none transition-all cursor-pointer hover:bg-black hover:text-gray'>Asteroid Watch</li>
+            <li className='w-full p-4 text-center list-none transition-all cursor-pointer hover:bg-black hover:text-gray'>Filters</li>
+          </div>
+        </div>
+      </header>
       <div className={`absolute text-2xl text-white left-0 z-10 flex items-center justify-center w-10 h-10 p-4 mb-4 ml-4 bg-gray-700 rounded-lg transition duration-300 bottom-[45px]  ${panel ? "" : "opacity-0"}`}>
         <button
           onClick={handleLayerToggle}
@@ -107,7 +134,7 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
       </div>
       <div className={`absolute text-2xl text-white left-0 z-10 flex items-center justify-center w-10 h-10 p-4 mb-4 ml-4 bg-gray-700 rounded-lg transition duration-300 bottom-[219px]  ${panel ? "" : "opacity-0"}`}>
         <button
-          onClick={setInfo(prev => !prev)}
+          onClick={()=>{setInfo(prev => !prev)}}
           className={`rounded-lg  bg-gray-700  ${info ? "opacity-100" : 'opacity-35'} transition duration-300 z-50`}
         >
           <LuInfo className='text-xl' />
@@ -118,19 +145,18 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
   )
 }
 function App() {
-  const [showSunLabels, setShowSunLabels] = useState(true);
-  const [showPlanetLabels, setShowPlanetLabels] = useState(true);
+  const [showSunLabels, setShowSunLabels] = useState(false);
+  const [showPlanetLabels, setShowPlanetLabels] = useState(false);
   const [showPlanetTrails, setShowPlanetTrails] = useState(true);
   const [showAsteroidLabels, setShowAsteroidLabels] = useState(true);
   const [showAsteroidTrails, setShowAsteroidTrails] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
   const [showLayerPanel, setShowLayerPanel] = useState(false);
-  
+
   const [info, setInfo] = useState(false)
   const [onPlay, setOnPlay] = useState(true)
   const [onPass, setOnPass] = useState(false)
   const [onBack, setOnBack] = useState(false)
-  console.log(info)
   const handleFilterToggle = () => {
     setShowFilterPanel(prev => !prev);
   };
@@ -140,6 +166,7 @@ function App() {
 
   return (
     <div className="relative flex w-screen h-screen overflow-hidden bg-gray-950">
+
       <div className="absolute bottom-0 left-0 flex justify-end p-4 text-white z-100">
         {/* Botón de filtro */}
         <button
