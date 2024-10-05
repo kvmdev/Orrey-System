@@ -7,6 +7,7 @@ import { Vector3 } from 'three';
 import { Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import {  useTexture } from '@react-three/drei'; 
+import Moons from './Moons';
 
 const planets = [
     { name: "Mercurio", perihelion: 0.3075, aphelion: 0.4667, eccentricity: 0.2056, inclination: 7.00, period: 0.24, color: 'gray', size: 4880 ,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291971698249171014/gltf_embedded_0.png?ex=670209e8&is=6700b868&hm=d46e9995bc11f51b541c604a695041ac1cf7b7c8aeb1130e69600e470b98502f&' },
@@ -24,50 +25,7 @@ const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlane
     const cameraRef = useRef();
 
     // Componente para la Luna
-    const Moon = ({ planetRef, showMoonOrbit }) => {
-        const moonRef = useRef();
-        const moonOrbitRadius = 0.00257 * 20; // Ajustamos la escala de la órbita lunar (aumentamos)
-        const moonPeriod = 27.3 / 365.25; // Periodo de órbita de la Luna en años
-
-        // Generar puntos de la órbita de la Luna
-        const createOrbitPoints = (orbitRadius, numPoints = 100) => {
-            const points = [];
-            for (let i = 0; i <= numPoints; i++) {
-                const angle = (i / numPoints) * Math.PI * 2;
-                const x = orbitRadius * Math.cos(angle);
-                const y = orbitRadius * Math.sin(angle);
-                points.push(new Vector3(x, y, 0));
-            }
-            return points;
-        };
-
-        const moonOrbitPoints = createOrbitPoints(moonOrbitRadius);
-
-        useFrame(({ clock }) => {
-            if (planetRef.current) {
-                const time = clock.getElapsedTime();
-                const angularVelocity = (2 * Math.PI) / moonPeriod;
-                const angle = time * angularVelocity;
-
-                // Posición de la Luna en relación con la Tierra
-                const x = planetRef.current.position.x + moonOrbitRadius * Math.cos(angle);
-                const y = planetRef.current.position.y + moonOrbitRadius * Math.sin(angle);
-                const z = planetRef.current.position.z;
-
-                moonRef.current.position.set(x, y, z);
-            }
-        });
-
-        return (
-            <>
-                {showMoonOrbit && <Line points={moonOrbitPoints} color="red" lineWidth={5} />} {/* Dibuja la órbita */}
-                <mesh ref={moonRef} position={[moonOrbitRadius, 0, 0]}>
-                    <sphereGeometry args={[0.001, 16, 16]} /> {/* Ajustamos el tamaño de la Luna */}
-                    <meshBasicMaterial color="gray" />
-                </mesh>
-            </>
-        );
-    };
+    
 
     const Planet = ({ perihelion, aphelion, eccentricity, inclination, period, color, size, name,textures, showPlanetLabels }) => {
         const ref = useRef();
@@ -102,7 +60,7 @@ const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlane
             const x = (semiMajorAxis * 20) * Math.cos(angle);
             const y = (semiMinorAxis * 20) * Math.sin(angle);
             const z = (y * Math.sin(inclinationInRadians)) * 20;
-
+            
             ref.current.position.set(x, y, z);
 
             if (textRef.current) {
@@ -111,7 +69,7 @@ const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlane
                 textRef.current.lookAt(camera.position);
             }
         });
-
+       
         return (
             <>
                 {showPlanetTrails && (<Line points={orbitPoints} color={color} lineWidth={1} />)}
@@ -131,7 +89,9 @@ const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlane
                         {name}
                     </Text>
                 )}
-                {name === "Tierra" && <Moon planetRef={ref} showMoonOrbit={showPlanetTrails} />} {/* Añadimos la órbita de la Luna */}
+                <Moons planetRef={ref} showMoonOrbit={showPlanetTrails} />
+                
+                 
             </>
         );
     };

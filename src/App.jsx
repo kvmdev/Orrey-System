@@ -9,6 +9,7 @@ import { FaCheck } from "react-icons/fa";
 import { IoPlay } from "react-icons/io5";
 import { IoPlayForward } from "react-icons/io5";
 import { FaPause } from "react-icons/fa6";
+import { LuInfo } from "react-icons/lu";
 const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setShowPlanetLabels, showAsteroidLabels, setShowAsteroidLabels, handleLayerToggle, setShowPlanetTrails, showPlanetTrails, showAsteroidTrails, setShowAsteroidTrails }) => {
   return (
     <div className="absolute right-0 z-50 flex flex-col items-center w-64 h-full p-4 text-white">
@@ -62,7 +63,7 @@ const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setSho
     </div>
   );
 };
-const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass , onBack, onPass }) => {
+const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass, onBack, onPass, info, setInfo }) => {
 
   const handlePlayToggle = () => {
     setOnPlay(prev => !prev);
@@ -84,8 +85,8 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
       </div>
       <div className={`absolute text-2xl gap-4 flex-col justify-around text-white left-0 z-10 flex items-center  w-10 h-30 p-4 mb-4 ml-4 bg-gray-700 rounded-lg transition duration-300 bottom-[90px]  ${panel ? "" : "opacity-0"}`}>
         <button
-          onClick={()=>{onBack ? "" :setOnPass(prev => !prev);}}
-          className={`rounded-lg  bg-gray-700  ${onPass? "opacity-100" : 'opacity-35'} transition duration-300 z-50`}
+          onClick={() => { onBack ? "" : setOnPass(prev => !prev); }}
+          className={`rounded-lg  bg-gray-700  ${onPass ? "opacity-100" : 'opacity-35'} transition duration-300 z-50`}
         >
           <IoPlayForward className='text-xl' />
         </button>
@@ -93,15 +94,25 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
           onClick={handlePlayToggle}
           className={`rounded-lg  bg-gray-700  ${onPlay ? "opacity-100" : 'opacity-35'} transition duration-300 z-50`}
         >
-          {onPlay?<FaPause className='text-xl' />:<IoPlay className='text-xl' />}
-          
+          {onPlay ? <FaPause className='text-xl' /> : <IoPlay className='text-xl' />}
+
         </button>
         <button
-          onClick={()=>{onPass ? "" :setOnBack(prev => !prev);}}
+          onClick={() => { onPass ? "" : setOnBack(prev => !prev); }}
           className={`rounded-lg  bg-gray-700  ${onBack ? "opacity-100" : 'opacity-35'} transition duration-300 z-50`}
         >
           <IoPlayBack className='text-xl' />
         </button>
+
+      </div>
+      <div className={`absolute text-2xl text-white left-0 z-10 flex items-center justify-center w-10 h-10 p-4 mb-4 ml-4 bg-gray-700 rounded-lg transition duration-300 bottom-[219px]  ${panel ? "" : "opacity-0"}`}>
+        <button
+          onClick={setInfo(prev => !prev)}
+          className={`rounded-lg  bg-gray-700  ${info ? "opacity-100" : 'opacity-35'} transition duration-300 z-50`}
+        >
+          <LuInfo className='text-xl' />
+        </button>
+
       </div>
     </>
   )
@@ -114,11 +125,12 @@ function App() {
   const [showAsteroidTrails, setShowAsteroidTrails] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
   const [showLayerPanel, setShowLayerPanel] = useState(false);
-
+  
+  const [info, setInfo] = useState(false)
   const [onPlay, setOnPlay] = useState(true)
   const [onPass, setOnPass] = useState(false)
   const [onBack, setOnBack] = useState(false)
-
+  console.log(info)
   const handleFilterToggle = () => {
     setShowFilterPanel(prev => !prev);
   };
@@ -138,7 +150,7 @@ function App() {
         </button>
 
       </div>
-      <LayerPanel setOnBack={setOnBack} onBack={onBack} setOnPass={setOnPass} onPass={onPass} onPlay={onPlay} setOnPlay={setOnPlay} panel={showFilterPanel} showLayerPanel={showLayerPanel} setShowLayerPanel={setShowLayerPanel} />
+      <LayerPanel info={info} setInfo={setInfo} setOnBack={setOnBack} onBack={onBack} setOnPass={setOnPass} onPass={onPass} onPlay={onPlay} setOnPlay={setOnPlay} panel={showFilterPanel} showLayerPanel={showLayerPanel} setShowLayerPanel={setShowLayerPanel} />
 
       {/* Ventana lateral de filtro */}
 
@@ -155,6 +167,7 @@ function App() {
           showPlanetTrails={showPlanetTrails}
           showAsteroidTrails={showAsteroidTrails}
           setShowAsteroidTrails={setShowAsteroidTrails}
+
         />
       )}
 
