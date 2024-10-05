@@ -49,7 +49,7 @@ const generateKuiperBeltAsteroids = (numAsteroids) => {
     return asteroids;
 };
 
-const SolarSystem = ({ showAsteroidLabels, showSunLabels, showAsteroidTrails, onPlay }) => {
+const SolarSystem = ({ showAsteroidLabels, showSunLabels, showAsteroidTrails, onPlay, asteroids }) => {
     const beltAsteroids = generateBeltAsteroids(1000); // Asteroides del cinturón de asteroides
     const kuiperBeltAsteroids = generateKuiperBeltAsteroids(1000); // 30 objetos del cinturón de Kuiper
 
@@ -75,18 +75,19 @@ const SolarSystem = ({ showAsteroidLabels, showSunLabels, showAsteroidTrails, on
         <>
             {/* Añadimos el Sol en el centro del sistema solar */}
             <Sun showLabels={showSunLabels} />
-
-            {/* Renderizamos los asteroides del cinturón de asteroides */}
-            {beltAsteroids.map((asteroid, index) => {
-                const perihelion = parseFloat(asteroid.q_au_1);
-                const aphelion = parseFloat(asteroid.q_au_2);
+            {asteroids.map((asteroid, index) => {
+                const perihelion = parseFloat(asteroid.q_au_1); // Distancia mínima al sol
+                const aphelion = parseFloat(asteroid.q_au_2);   // Distancia máxima al sol
                 const semiMajorAxis = (perihelion + aphelion) / 2;
-                const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(parseFloat(asteroid.e), 2));
-                const inclination = (Math.PI / 180) * parseFloat(asteroid.i_deg);
+                const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(parseFloat(asteroid.e), 2)); // Excentricidad
+                const inclination = (Math.PI / 180) * parseFloat(asteroid.i_deg); // Convertir grados a radianes
 
+                // Calcular la velocidad orbital en el perihelio
                 const velocity = calculateVelocity(perihelion, parseFloat(asteroid.e));
-                const scaledAngularVelocity = velocity / 10000;
-                const initialPhase = Math.random() * Math.PI * 2;
+                const scaledAngularVelocity = velocity / 10000; // Escalar la velocidad para la visualización
+
+                // Crear un ángulo inicial aleatorio para variar la posición de inicio del asteroide
+                const initialPhase = Math.random() * Math.PI * 2; // Ángulo entre 0 y 2PI
 
                 return (
                     <React.Fragment key={index}>
@@ -102,7 +103,40 @@ const SolarSystem = ({ showAsteroidLabels, showSunLabels, showAsteroidTrails, on
                             name={asteroid.object_name}
                             showLabels={showAsteroidLabels}
                             onPlay={onPlay}
+                            color={'blue'} 
+                            size={0.2}// Pasar la visibilidad de las etiquetas
+                        />
+                    </React.Fragment>
+                );
+            })}
+            {/* Renderizamos los asteroides del cinturón de asteroides */}
+            {beltAsteroids.map((asteroid, index) => {
+                const perihelion = parseFloat(asteroid.q_au_1);
+                const aphelion = parseFloat(asteroid.q_au_2);
+                const semiMajorAxis = (perihelion + aphelion) / 2;
+                const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(parseFloat(asteroid.e), 2));
+                const inclination = (Math.PI / 180) * parseFloat(asteroid.i_deg);
+
+                const velocity = calculateVelocity(perihelion, parseFloat(asteroid.e));
+                const scaledAngularVelocity = velocity / 10000;
+                const initialPhase = Math.random() * Math.PI * 2;
+
+                return (
+                    <React.Fragment key={index}>
+                        <Asteroid
+                            showAsteroidTrails={false}
+                            position={[perihelion, 0, 0]}
+                            semiMajorAxis={semiMajorAxis}
+                            semiMinorAxis={semiMinorAxis}
+                            inclination={inclination}
+                            angularVelocity={scaledAngularVelocity}
+                            initialPhase={initialPhase}
+                            randomZFactor={Math.random() * 5 - 2.5}
+                            name={asteroid.object_name}
+                            showLabels={showAsteroidLabels}
+                            onPlay={onPlay}
                             size={0.2}
+                            color={'gray'} 
                         />
                     </React.Fragment>
                 );
@@ -123,7 +157,7 @@ const SolarSystem = ({ showAsteroidLabels, showSunLabels, showAsteroidTrails, on
                 return (
                     <React.Fragment key={index}>
                         <Asteroid
-                            showAsteroidTrails={showAsteroidTrails}
+                            showAsteroidTrails={false}
                             position={[perihelion, 0, 0]}
                             semiMajorAxis={semiMajorAxis}
                             semiMinorAxis={semiMinorAxis}
@@ -135,6 +169,7 @@ const SolarSystem = ({ showAsteroidLabels, showSunLabels, showAsteroidTrails, on
                             showLabels={showAsteroidLabels}
                             onPlay={onPlay}
                             size={2}
+                            color={'gray'} 
                         />
                     </React.Fragment>
                 );
@@ -240,7 +275,8 @@ const Asteroid = ({
     showLabels,
     showAsteroidTrails,
     onPlay,
-    size
+    size,
+    color
 }) => {
     const ref = useRef();
     const textRef = useRef();
@@ -254,7 +290,7 @@ const Asteroid = ({
             const angle = (i / numPoints) * Math.PI * 2;
             const x = semiMajorAxis * 20 * Math.cos(angle);
             const y = semiMinorAxis * 20 * Math.sin(angle);
-            const z = y * Math.sin(inclination);
+            const z = y * 2 * Math.sin(inclination) * (randomZFactor || 1);
 
             if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
                 points.push(new Vector3(x, y, z));
@@ -298,7 +334,7 @@ const Asteroid = ({
             {showAsteroidTrails ? <Line points={orbitPoints} color="grey" lineWidth={1} /> : null}
             <mesh ref={ref}>
                 <sphereGeometry args={[size, 6, 6]} />
-                <meshBasicMaterial color="white" /> 
+                <meshBasicMaterial color={color} /> 
             </mesh>
             {showLabels && (
                 <Text
