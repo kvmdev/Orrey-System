@@ -39,7 +39,7 @@ const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setSho
           >
             {showAsteroidLabels ? <FaCheck /> : ""}
           </div>
-          <span className="ml-2 text-base font-semibold">Asteroides</span>
+          <span className="ml-2 text-base font-semibold">Cometas</span>
         </label>
         <div className="mt-6 text-base font-bold">Trayectorias</div>
         <hr className='my-2' />
@@ -57,7 +57,7 @@ const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setSho
           >
             {showAsteroidTrails ? <FaCheck /> : ""}
           </div>
-          <span className="ml-2 text-base font-semibold">Asteroides</span>
+          <span className="ml-2 text-base font-semibold">Cometas</span>
         </label>
       </div>
     </div>
