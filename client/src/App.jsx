@@ -139,7 +139,7 @@ function App() {
   };
 
   return (
-    <div className="relative flex w-screen h-screen overflow-hidden bg-[url('https://cdn.discordapp.com/attachments/1228539522828992574/1291982430785376367/formas-geometricas-abstractas-fondo-o-textura.jpg?ex=670213e7&is=6700c267&hm=ada4bff4e409d8ec8e2f92de47c4c44a16ca74cc8905c0e6c1611e1ad4873a90&')]">
+    <div className="relative flex w-screen h-screen overflow-hidden bg-gray-950">
       <div className="absolute bottom-0 left-0 flex justify-end p-4 text-white z-100">
         {/* Botón de filtro */}
         <button

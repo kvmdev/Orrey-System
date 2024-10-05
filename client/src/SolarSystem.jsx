@@ -248,7 +248,7 @@ const Asteroid = ({
     // Ref para almacenar el ángulo actual
     const currentAngle = useRef(Math.random() * Math.PI * 2); // Inicializa con un ángulo aleatorio
 
-    const createOrbitPoints = (semiMajorAxis, semiMinorAxis, inclination, numPoints = 100) => {
+    const createOrbitPoints = (semiMajorAxis, semiMinorAxis, inclination, numPoints = 50) => {
         const points = [];
         for (let i = 0; i <= numPoints; i++) {
             const angle = (i / numPoints) * Math.PI * 2;
@@ -290,16 +290,15 @@ const Asteroid = ({
             textRef.current.quaternion.slerp(camera.quaternion, 0.1); // Suaviza el movimiento del texto
         }
 
-        // Actualizar el tiempo del shader
-        ref.current.material.uniforms.uTime.value = time;
+        
     });
 
     return (
         <group>
             {showAsteroidTrails ? <Line points={orbitPoints} color="grey" lineWidth={1} /> : null}
             <mesh ref={ref}>
-                <sphereGeometry args={[size, 16, 16]} />
-                <asteroidMaterial attach="material" uColor={new THREE.Color('white')} />
+                <sphereGeometry args={[size, 6, 6]} />
+                <meshBasicMaterial color="white" /> 
             </mesh>
             {showLabels && (
                 <Text
