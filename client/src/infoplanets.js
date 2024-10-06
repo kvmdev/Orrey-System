@@ -8,6 +8,7 @@ export const solarSystemPlanets = [
       perihelion: 46e6, // en km
       aphelion: 69.8e6, // en km
     },
+    
     orbit: {
       eccentricity: 0.2056,
       inclination: 7.01, // en grados
@@ -31,7 +32,7 @@ export const solarSystemPlanets = [
       "Mercurio es el planeta más cercano al Sol y el más rápido en completar una órbita.",
       "Debido a su delgada atmósfera, las temperaturas varían drásticamente entre el día y la noche.",
     ],
-    image: "https://example.com/images/mercury.jpg", // URL real de una imagen ligera
+    image: 'https://space-facts.com/wp-content/uploads/mercury-transparent.png', // URL real de una image ligera
   },
   {
     name: "Venus",
@@ -63,7 +64,7 @@ export const solarSystemPlanets = [
       "Venus tiene una rotación retrógrada, lo que significa que gira en dirección opuesta a su órbita.",
       "Es el planeta más caliente del Sistema Solar debido a su atmósfera de CO₂.",
     ],
-    image: "https://example.com/images/venus.jpg", // URL real de una imagen ligera
+    image: 'https://space-facts.com/wp-content/uploads/venus-transparent.png',
   },
   {
     name: "Tierra",
@@ -96,7 +97,7 @@ export const solarSystemPlanets = [
       "La Tierra es el único planeta conocido con vida y agua líquida en su superficie.",
       "Tiene una atmósfera que protege a los seres vivos de los rayos solares dañinos.",
     ],
-    image: "https://example.com/images/earth.jpg", // URL real de una imagen ligera
+    image: 'https://space-facts.com/wp-content/uploads/earth-transparent.png',
   },
   {
     name: "Marte",
@@ -129,10 +130,9 @@ export const solarSystemPlanets = [
       "Marte tiene la montaña más alta del Sistema Solar, el Olympus Mons.",
       "Es el planeta que más ha fascinado a los humanos por su similitud con la Tierra.",
     ],
-    image: "https://example.com/images/mars.jpg", // URL real de una imagen ligera
-  },
+    image: 'https://space-facts.com/wp-content/uploads/mars-transparent.png',},
   {
-    name: "Júpiter",
+    name: "Jupiter",
     meanRadius: 69911, // en kilómetros
     mass: 1.8982e27, // en kg
     gravity: 24.79, // m/s²
@@ -161,7 +161,8 @@ export const solarSystemPlanets = [
       "Júpiter es el planeta más grande del Sistema Solar y tiene una Gran Mancha Roja, una tormenta gigantesca.",
       "Tiene la mayor cantidad de lunas conocidas.",
     ],
-    image: "https://example.com/images/jupiter.jpg", // URL real de una imagen ligera
+    image: 'https://space-facts.com/wp-content/uploads/jupiter-transparent.png',
+ // URL real de una image ligera
   },
   {
     name: "Saturno",
@@ -193,8 +194,8 @@ export const solarSystemPlanets = [
       "Saturno es famoso por sus anillos compuestos principalmente de partículas de hielo y roca.",
       "Titán, su luna más grande, tiene una atmósfera densa y lagos de metano.",
     ],
-    image: "https://example.com/images/saturn.jpg", // URL real de una imagen ligera
-  },
+    image: 'https://space-facts.com/wp-content/uploads/saturn-transparent.png',
+},
   {
     name: "Urano",
     meanRadius: 25362, // en kilómetros
@@ -226,8 +227,8 @@ export const solarSystemPlanets = [
       "Urano rota de lado, lo que significa que sus polos están donde otros planetas tienen sus ecuador.",
       "Es un planeta gigante de hielo con una atmósfera rica en metano, lo que le da su color azul.",
     ],
-    image: "https://example.com/images/uranus.jpg", // URL real de una imagen ligera
-  },
+    image: 'https://space-facts.com/wp-content/uploads/uranus-transparent.png',
+},
   {
     name: "Neptuno",
     meanRadius: 24622, // en kilómetros
@@ -259,6 +260,6 @@ export const solarSystemPlanets = [
       "Neptuno fue el primer planeta descubierto a través de cálculos matemáticos antes de ser observado.",
       "Tiene los vientos más rápidos del Sistema Solar, con ráfagas de hasta 2,100 km/h.",
     ],
-    image: "https://example.com/images/neptune.jpg", // URL real de una imagen ligera
+    image: 'https://space-facts.com/wp-content/uploads/neptune-transparent.png',
   },
 ];

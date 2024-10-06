@@ -67,7 +67,7 @@ const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setSho
     </div>
   );
 };
-const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass, onBack, onPass, info, setInfo }) => {
+const LayerPanel = ({setShowLearn, panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass, onBack, onPass, info, setInfo }) => {
   const [IsMenuOpen, setMenuOpen] = useState(false);
   const handlePlayToggle = () => {
     setOnPlay(prev => !prev);
@@ -84,9 +84,9 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
           Eyes on Stars
         </div>
         <ul className='items-center hidden gap-12 text-base font-semibold xl:flex'>
-          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray'>Learn</li>
-          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray'>Asteroid Watch</li>
-          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray'>Filters</li>
+          <li onClick={()=>{setShowLearn(prev => !prev)}} className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:scale-110 hover:text-gray'>Learn</li>
+          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray hover:scale-110'>Asteroid Watch</li>
+          <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray hover:scale-110'>Filters</li>
         </ul>
         <div className='relative items-center justify-center hidden gap-3 md:flex'>
           <IoSearchSharp className='text-2xl ' />
@@ -97,7 +97,7 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
           className='text-5xl cursor-pointer xl:hidden' >
           <IoIosMenu className='text-5xl cursor-pointer xl:hidden' onClick={() => setMenuOpen(prev => !prev)} />
           <div className={`absolute xl:hidden top-24 left-0 w-full  flex flex-col items-center gap-6 font-semibold text-lg transform transition-transform ${IsMenuOpen ? "opacity-100" : "hidden"}`}>
-            <li className='w-full p-4 text-center list-none transition-all cursor-pointer hover:bg-black hover:text-gray'>Learn</li>
+            <li onClick={()=>{setShowLearn(prev => !prev)}}  className='w-full p-4 text-center list-none transition-all cursor-pointer hover:bg-black hover:text-gray'>Learn</li>
             <li className='w-full p-4 text-center list-none transition-all cursor-pointer hover:bg-black hover:text-gray'>Asteroid Watch</li>
             <li className='w-full p-4 text-center list-none transition-all cursor-pointer hover:bg-black hover:text-gray'>Filters</li>
           </div>
@@ -147,10 +147,10 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
   )
 }
 const PlanetPanel = ({ setIsZoomed, info }) => {
-  console.log(info)
+  
   return (
     <div className='absolute right-0 z-40 flex items-center justify-center h-screen w-80'>
-      <div className='w-[300px] font-bold text-white pt-[20px] bg-zinc-950 h-[70%] rounded-xl'>
+      <div className='w-[300px] font-bold text-white pt-[5px] h-[70%] rounded-xl'>
         <h2 onClick={() => { setIsZoomed(false) }} className="absolute flex items-center mb-4 text-lg font-bold cursor-pointer right-10">Volver<IoIosArrowForward className='pt-1 text-xl' /></h2>
         <div className='flex flex-col w-full h-full p-10'>
           <h1 className='text-xl '>{info.name == 'Tierra' ? info.name + ' ( Estas aquí )' : info.name}</h1>
@@ -176,6 +176,64 @@ const PlanetPanel = ({ setIsZoomed, info }) => {
     </div>
   )
 }
+const InfoPanel = ({setShowLearn}) => {
+  const [popUp, setPopUp] = useState(false)
+  const [popUpInfo, setPopUpInfo] = useState('')
+  function ReturnInfo(info) {
+    setPopUp(true)
+    setPopUpInfo(info)
+  }
+  let info = ['Los asteroides son cuerpos rocosos y metálicos que orbitan el Sol, pero son mucho más pequeños que los planetas. La mayoría de los asteroides se encuentran en el Cinturón de Asteroides, una región ubicada entre las órbitas de Marte y Júpiter, aunque también hay asteroides en otras partes del Sistema Solar',
+    'Esta aplicacion te muestra todos los cometas, asteroides y planetas del sistema solar con sus respectivas trayectorias y nombres.',
+    'Estos objetos, conocidos como objetos cercanos a la Tierra (o NEOs, por sus siglas en inglés), incluyen cuerpos cuya órbita los lleva lo suficientemente cerca del planeta como para ser monitoreados por su potencial de impacto.',
+    'Actualmente, no hay ningún asteroide o cometa conocido que presente un riesgo significativo de impacto con la Tierra en el futuro cercano. Las agencias espaciales, como la NASA y la ESA, monitorean continuamente los objetos cercanos a la Tierra (NEOs) a través de programas como el Centro de Estudios de Objetos Cercanos a la Tierra (CNEOS',
+    'Sí, es posible visitar un asteroide, y de hecho, ya se han llevado a cabo misiones exitosas que han enviado naves espaciales a asteroides. Estas misiones han tenido como objetivo explorar y, en algunos casos, recoger muestras para su estudio en la Tierra.',
+    'Las misiones a los asteroides no solo nos brindan un mejor conocimiento del cosmos, sino que también abren la puerta a avances tecnológicos, recursos valiosos, y protección para el futuro de nuestro planeta.'
+  ]
+  return (
+    <div className="absolute flex items-center justify-center w-screen h-screen bg-neutral-800">
+      <div className={`${popUp ? 'opacity-100':"opacity-0"} absolute z-40 flex items-center justify-center text-white bg-gray-600 rounded-lg h-80 w-80 right-40 p-8`}>{popUpInfo}</div>
+      <div className="w-80 h-[80%] relative bg-gray-600 z-[90] flex flex-col items-center justify-start p-10 rounded-lg">
+        
+        <div onClick={()=>{setShowLearn(prev => !prev)}}  className='pl-[200px] text-white font-bold flex justify-center items-center hover:scale-110 cursor-pointer transition-all '>Volver <IoIosArrowForward className='pt-1 text-xl' /></div>
+        {/* Encabezado */}
+        <h1 className="text-2xl font-bold text-white">Learn</h1>
+
+        {/* Subtítulo */}
+        <p className="mt-2 text-sm text-center text-white">
+        Sumérgete más profundamente en los asteroides con nuestras historias
+        </p>
+
+        {/* Opción 1: Asteroides 101 */}
+        <div className="w-full mt-4 cursor-pointer">
+          <div className="w-full mb-2 border-t border-white" />
+          <h2 className="text-lg font-semibold text-white">Asteroides 101</h2>
+          <p onClick={()=>{ReturnInfo(info[0])}} className="mt-2 text-sm text-white transition-transform hover:scale-110">¿Qué son los asteroides?</p>
+          <p onClick={()=>{ReturnInfo(info[1])}}  className="mt-1 text-sm text-white transition-transform hover:scale-110">¿Qué me muestra esta aplicación?</p>
+        </div>
+
+        {/* Opción 2: Close Approach */}
+        <div className="w-full mt-4 cursor-pointer">
+          <div className="w-full mb-2 border-t border-white" />
+          <h2 className="text-lg font-semibold text-white">Close Approach</h2>
+          <p onClick={()=>{ReturnInfo(info[2])}}  className="mt-2 text-sm text-white transition-transform hover:scale-110">¿Qué es un acercamiento cercano?</p>
+          <p onClick={()=>{ReturnInfo(info[3])}}  className="mt-1 text-sm text-white transition-transform hover:scale-110">¿Estamos en peligro de impacto?</p>
+        </div>
+
+        {/* Opción 3: Missions */}
+        <div className="w-full mt-4 cursor-pointer">
+          <div className="w-full mb-2 border-t border-white" />
+          <h2 className="text-lg font-semibold text-white">Missions</h2>
+          <p onClick={()=>{ReturnInfo(info[4])}}  className="mt-2 text-sm text-white transition-transform hover:scale-110">¿Podemos visitar un asteroide?</p>
+          <p onClick={()=>{ReturnInfo(info[5])}}  className="mt-1 text-sm text-white transition-transform hover:scale-110">¿Qué pueden lograr las misiones?</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
 function App() {
   const [showSunLabels, setShowSunLabels] = useState(false);
   const [showPlanetLabels, setShowPlanetLabels] = useState(false);
@@ -190,6 +248,8 @@ function App() {
   const [onPass, setOnPass] = useState(false)
   const [onBack, setOnBack] = useState(false)
   const [infoPlanet, setinfoPlanet] = useState('')
+  const [showLearn, setShowLearn] = useState(false)
+  console.log(showLearn)
   const handleFilterToggle = () => {
     setShowFilterPanel(prev => !prev);
   };
@@ -216,9 +276,9 @@ function App() {
         </button>
 
       </div>
-      <LayerPanel info={info} setInfo={setInfo} setOnBack={setOnBack} onBack={onBack} setOnPass={setOnPass} onPass={onPass} onPlay={onPlay} setOnPlay={setOnPlay} panel={showFilterPanel} showLayerPanel={showLayerPanel} setShowLayerPanel={setShowLayerPanel} />
-
-      {/* Ventana lateral de filtro */}
+      <LayerPanel setShowLearn={setShowLearn} info={info} setInfo={setInfo} setOnBack={setOnBack} onBack={onBack} setOnPass={setOnPass} onPass={onPass} onPlay={onPlay} setOnPlay={setOnPlay} panel={showFilterPanel} showLayerPanel={showLayerPanel} setShowLayerPanel={setShowLayerPanel} />
+      
+      {showLearn && (<InfoPanel setShowLearn={setShowLearn}/>)}
       {isZoomed && (<PlanetPanel setIsZoomed={setIsZoomed} info={infoPlanet} />)}
       {showLayerPanel && (
         <FilterPanel
