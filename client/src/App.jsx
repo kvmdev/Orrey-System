@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { IoIosArrowForward } from "react-icons/io";
 import { IoPlayBack } from "react-icons/io5";
@@ -90,7 +90,7 @@ const LayerPanel = ({setShowLearn, panel, showLayerPanel, setShowLayerPanel, set
         </ul>
         <div className='relative items-center justify-center hidden gap-3 md:flex'>
           <IoSearchSharp className='text-2xl ' />
-          <input type="text" placeholder='search....' className='py-2 pl-4 text-gray-800 border border-black rounded-xl focus:bg-slate-100 focus:outline-none' />
+          <input type="text" placeholder='search....' className='py-2 pl-4 text-gray-800 border border-black rounded-xl focus:bg-slate-100 focus:outline-none'/>
         </div>
 
         <div
@@ -235,34 +235,50 @@ const InfoPanel = ({setShowLearn}) => {
 
 
 function App() {
-  const [showSunLabels, setShowSunLabels] = useState(false);
-  const [showPlanetLabels, setShowPlanetLabels] = useState(false);
-  const [showPlanetTrails, setShowPlanetTrails] = useState(true);
-  const [showAsteroidLabels, setShowAsteroidLabels] = useState(true);
-  const [showAsteroidTrails, setShowAsteroidTrails] = useState(false);
-  const [showFilterPanel, setShowFilterPanel] = useState(true);
-  const [showLayerPanel, setShowLayerPanel] = useState(false);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [info, setInfo] = useState(false)
-  const [onPlay, setOnPlay] = useState(true)
-  const [onPass, setOnPass] = useState(false)
-  const [onBack, setOnBack] = useState(false)
-  const [infoPlanet, setinfoPlanet] = useState('')
-  const [showLearn, setShowLearn] = useState(false)
-  console.log(showLearn)
-  const handleFilterToggle = () => {
-    setShowFilterPanel(prev => !prev);
-  };
-  const handleLayerToggle = () => {
-    setShowLayerPanel(prev => !prev);
-  };
+    const [showSunLabels, setShowSunLabels] = useState(false);
+    const [showPlanetLabels, setShowPlanetLabels] = useState(false);
+    const [showPlanetTrails, setShowPlanetTrails] = useState(true);
+    const [showAsteroidLabels, setShowAsteroidLabels] = useState(true);
+    const [showAsteroidTrails, setShowAsteroidTrails] = useState(false);
+    const [showFilterPanel, setShowFilterPanel] = useState(true);
+    const [showLayerPanel, setShowLayerPanel] = useState(false);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [info, setInfo] = useState(false)
+    const [onPlay, setOnPlay] = useState(true)
+    const [onPass, setOnPass] = useState(false)
+    const [onBack, setOnBack] = useState(false)
+    const [infoPlanet, setinfoPlanet] = useState('')
+    const [showLearn, setShowLearn] = useState(false)
+    const [planets, setPlanets] = useState([]);
+    console.log(showLearn)
+    const handleFilterToggle = () => {
+      setShowFilterPanel(prev => !prev);
+    };
+    useEffect(()=> {
+      if(localStorage.length == 0){
+          async function fetchData() {
+            const response = await fetch('http://localhost:3000/api/planets');
+            const data = await response.json();
+            localStorage.setItem('planets', JSON.stringify(data.src_json));
+            const convertedPlanets = JSON.parse(localStorage.getItem('planets')); 
+            setPlanets(convertedPlanets);
+          }
+          fetchData();
+        } else {
+          const convertedPlanets = JSON.parse(localStorage.getItem('planets')); 
+          setPlanets(convertedPlanets);
+        }
+    }, []);
+    const handleLayerToggle = () => {
+      setShowLayerPanel(prev => !prev);
+    };
 
-  const handlePlanetClick = (name) => {
-    setIsZoomed(true);
-    solarSystemPlanets.forEach((planet) => {
-      if (planet.name == name) { setinfoPlanet(planet) }
-    })
-  };
+    const handlePlanetClick = (name) => {
+      setIsZoomed(true);
+      solarSystemPlanets.forEach((planet) => {
+        if (planet.name == name) { setinfoPlanet(planet) }
+      })
+    };
   return (
     <div className="relative flex w-screen h-screen overflow-hidden bg-gray-950">
 
@@ -301,6 +317,7 @@ function App() {
       {/* Componente Orrery separado para evitar re-renderizados */}
       <Orrery
         handlePlanetClick={handlePlanetClick}
+        planets={planets}
         onBack={onBack}
         onPass={onPass}
         onPlay={onPlay}

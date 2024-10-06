@@ -9,7 +9,7 @@ import { useFrame } from '@react-three/fiber';
 import {  useTexture } from '@react-three/drei'; 
 import Moons from './Moons';
 
-const planets = [
+/* const planets = [
     { name: "Mercurio", perihelion: 0.3075, aphelion: 0.4667, eccentricity: 0.2056, inclination: 7.00, period: 0.24, color: 'gray', size: 4880 ,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291971698249171014/gltf_embedded_0.png?ex=670209e8&is=6700b868&hm=d46e9995bc11f51b541c604a695041ac1cf7b7c8aeb1130e69600e470b98502f&' },
     { name: "Venus", perihelion: 0.7184, aphelion: 0.7282, eccentricity: 0.0068, inclination: 3.39, period: 0.62, color: 'yellow', size: 12104 ,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291973584943714364/gltf_embedded_0-min.png?ex=67020baa&is=6700ba2a&hm=5c486c9a2ab67b86be205dfa15f78605afadcdedda31af2c4b9269ab862ada31&'},
     { name: "Tierra", perihelion: 0.9833, aphelion: 1.0167, eccentricity: 0.0167, inclination: 0.00, period: 1.00, color: 'blue', size: 12742 ,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291964160262803560/EarthMapAtmos_2500x1250.jpg?ex=670202e3&is=6700b163&hm=46a204564633a18fa82284320f4184850f6ffa31fd3a87fc65325f339c644bc0&' },
@@ -18,12 +18,12 @@ const planets = [
     { name: "Saturno", perihelion: 9.0481, aphelion: 10.1238, eccentricity: 0.0565, inclination: 2.49, period: 29.46, color: 'yellow', size: 116460,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291968235914137651/saturn.jpg?ex=670206af&is=6700b52f&hm=b21415cf526695931d4b3b5eb976b0966195057cd8156641e7e4967ec1c76b79&' },
     { name: "Urano", perihelion: 18.3753, aphelion: 20.0899, eccentricity: 0.0464, inclination: 0.77, period: 84.01, color: 'blue', size: 50724,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291978703487893565/URANO_baseColor.jpeg?ex=6702106e&is=6700beee&hm=42b3846bc278c993286a7a62f8d8633c19e496b3914a8087283f4bb12271a190&' },
     { name: "Neptuno", perihelion: 29.7710, aphelion: 30.3315, eccentricity: 0.0086, inclination: 1.77, period: 164.8, color: 'cyan', size: 49244,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291978191979810856/Mat.1_baseColor.jpeg?ex=67020ff4&is=6700be74&hm=919cd5f1314d2a959a18f3a848043c36dc059de6ab70ad0aa65cc413eb739f2f&' }
-];
+]; */
 
-const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlanetTrails, showAsteroidTrails, onPlay, onPass, onBack, handlePlanetClick}) => {
+const Orrery = ({ planets, showSunLabels, showPlanetLabels, showAsteroidLabels, showPlanetTrails, showAsteroidTrails, onPlay, onPass, onBack, handlePlanetClick}) => {
     const [asteroids, setAsteroids] = useState([]);
     const cameraRef = useRef();
-
+    
     // Componente para la Luna
     
 
