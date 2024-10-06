@@ -8,4 +8,5 @@ const connection = mysql.createConnection({
     database: 'orray-system-db'
 })
 
+
 export {connection}
