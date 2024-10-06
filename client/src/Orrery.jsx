@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import SolarSystem from "../src/SolarSystem";
 import { PerspectiveCamera, OrbitControls, Text } from '@react-three/drei';
@@ -9,9 +8,6 @@ import { Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import {  useTexture } from '@react-three/drei'; 
 import Moons from './Moons';
-
-
-const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlanetTrails, showAsteroidTrails, onPlay, onPass, onBack }) => {
 
 const planets = [
     { name: "Mercurio", perihelion: 0.3075, aphelion: 0.4667, eccentricity: 0.2056, inclination: 7.00, period: 0.24, color: 'gray', size: 4880 ,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291971698249171014/gltf_embedded_0.png?ex=670209e8&is=6700b868&hm=d46e9995bc11f51b541c604a695041ac1cf7b7c8aeb1130e69600e470b98502f&' },
@@ -25,22 +21,8 @@ const planets = [
 ];
 
 const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlanetTrails, showAsteroidTrails, onPlay, onPass, onBack, handlePlanetClick}) => {
-
     const [asteroids, setAsteroids] = useState([]);
     const cameraRef = useRef();
-    const [planets, setPlanets] = useState([]);
-
-    useEffect(()=> {
-        const fetchData = async ()=> {
-            try {
-                const data = await axios.get('http://localhost:3000/api/planets');
-                setPlanets(data.data.src_json);
-            } catch (error) {
-                console.log('there was an error', error);
-            }
-        }
-        fetchData();
-    }, [])
 
     // Componente para la Luna
     
@@ -135,7 +117,7 @@ const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlane
     useEffect(() => {
         const fetchAsteroids = async () => {
             try {
-                const response = await axios.get('https://data.nasa.gov/resource/b67r-rgxc.json');
+                const response = await axios.get('//data.nasa.gov/resource/b67r-rgxc.json');
                 setAsteroids(response.data);
             } catch (error) {
                 console.error('Error fetching asteroid data:', error);
