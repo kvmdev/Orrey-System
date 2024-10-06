@@ -20,17 +20,17 @@ const planets = [
     { name: "Neptuno", perihelion: 29.7710, aphelion: 30.3315, eccentricity: 0.0086, inclination: 1.77, period: 164.8, color: 'cyan', size: 49244,texture:'https://cdn.discordapp.com/attachments/1228539522828992574/1291978191979810856/Mat.1_baseColor.jpeg?ex=67020ff4&is=6700be74&hm=919cd5f1314d2a959a18f3a848043c36dc059de6ab70ad0aa65cc413eb739f2f&' }
 ];
 
-const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlanetTrails, showAsteroidTrails, onPlay, onPass, onBack }) => {
+const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlanetTrails, showAsteroidTrails, onPlay, onPass, onBack, handlePlanetClick}) => {
     const [asteroids, setAsteroids] = useState([]);
     const cameraRef = useRef();
 
     // Componente para la Luna
     
 
-    const Planet = ({ perihelion, aphelion, eccentricity, inclination, period, color, size, name,textures, showPlanetLabels }) => {
+    const Planet = ({ perihelion, aphelion, eccentricity, inclination, period, color, size, name,textures, showPlanetLabels, handlePlanetClick}) => {
         const ref = useRef();
         const textRef = useRef();
-
+        
         const semiMajorAxis = (perihelion + aphelion) / 2;
         const semiMinorAxis = semiMajorAxis * Math.sqrt(1 - Math.pow(eccentricity, 2));
         const inclinationInRadians = (Math.PI / 180) * inclination;
@@ -69,11 +69,13 @@ const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlane
                 textRef.current.lookAt(camera.position);
             }
         });
-       
+
+        
+        
         return (
             <>
                 {showPlanetTrails && (<Line points={orbitPoints} color={color} lineWidth={1} />)}
-                <mesh ref={ref} position={[semiMajorAxis / 1000, 0, 0]}>
+                <mesh onPointerDown={()=>{handlePlanetClick(name)}} ref={ref} position={[semiMajorAxis / 1000, 0, 0]}>
                     <sphereGeometry args={[size / 15000, 16, 16]} />
                     <meshBasicMaterial map={texture}  />
                 </mesh>
@@ -140,6 +142,7 @@ const Orrery = ({ showSunLabels, showPlanetLabels, showAsteroidLabels, showPlane
             />
             {planets.map((planet, index) => (
                 <Planet
+                    handlePlanetClick={handlePlanetClick}
                     textures={planet.texture}
                     key={index}
                     perihelion={planet.perihelion}

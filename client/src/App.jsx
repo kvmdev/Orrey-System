@@ -12,9 +12,11 @@ import { FaPause } from "react-icons/fa6";
 import { LuInfo } from "react-icons/lu";
 import { IoSearchSharp } from "react-icons/io5";
 import { IoIosMenu } from "react-icons/io";
+import { solarSystemPlanets } from "./infoplanets";
+
 const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setShowPlanetLabels, showAsteroidLabels, setShowAsteroidLabels, handleLayerToggle, setShowPlanetTrails, showPlanetTrails, showAsteroidTrails, setShowAsteroidTrails }) => {
   return (
-    <div className="absolute right-0 z-50 flex flex-col items-center w-64 h-full p-4 text-white">
+    <div className="absolute right-0 z-50 flex flex-col items-center w-64 h-full p-4 pt-[80px] text-white">
       <h2 onClick={handleLayerToggle} className="absolute flex items-center mb-4 text-lg font-bold cursor-pointer right-10">Capas <IoIosArrowForward className='pt-1 text-xl' /></h2>
       <div className="flex flex-col mt-10">
         <div className="text-base font-bold ">Textos</div>
@@ -65,7 +67,7 @@ const FilterPanel = ({ showSunLabels, setShowSunLabels, showPlanetLabels, setSho
     </div>
   );
 };
-const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass, onBack, onPass, info, setInfo}) => {
+const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPlay, setOnBack, setOnPass, onBack, onPass, info, setInfo }) => {
   const [IsMenuOpen, setMenuOpen] = useState(false);
   const handlePlayToggle = () => {
     setOnPlay(prev => !prev);
@@ -73,13 +75,13 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
   const handleLayerToggle = () => {
     setShowLayerPanel(prev => !prev);
   };
-  console.log(IsMenuOpen)
+
   return (
     <>
       <header className="fixed top-0 z-50 flex items-center justify-between w-full px-6 py-2 text-white md:px-32">
         <div className='flex items-center justify-center gap-2 font-bold cursor-pointer hover:scale-110'>
-        <img src={'https://cdn.discordapp.com/attachments/749326094800519179/1292225019279310969/DALLE-2024-10-05-13.28.png?ex=6702f5d4&is=6701a454&hm=31109079e112cccc619808a8e4ce17380aef86245ff744c8c92593bb4c420c61&'} alt="Logo" className='w-16 transition-all' />
-        Eyes on Stars
+          <img src={'https://cdn.discordapp.com/attachments/749326094800519179/1292225019279310969/DALLE-2024-10-05-13.28.png?ex=6702f5d4&is=6701a454&hm=31109079e112cccc619808a8e4ce17380aef86245ff744c8c92593bb4c420c61&'} alt="Logo" className='w-16 transition-all' />
+          Eyes on Stars
         </div>
         <ul className='items-center hidden gap-12 text-base font-semibold xl:flex'>
           <li className='p-3 transition-all rounded-md cursor-pointer hover:bg-white-400 hover:text-gray'>Learn</li>
@@ -134,7 +136,7 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
       </div>
       <div className={`absolute text-2xl text-white left-0 z-10 flex items-center justify-center w-10 h-10 p-4 mb-4 ml-4 bg-gray-700 rounded-lg transition duration-300 bottom-[219px]  ${panel ? "" : "opacity-0"}`}>
         <button
-          onClick={()=>{setInfo(prev => !prev)}}
+          onClick={() => { setInfo(prev => !prev) }}
           className={`rounded-lg  bg-gray-700  ${info ? "opacity-100" : 'opacity-35'} transition duration-300 z-50`}
         >
           <LuInfo className='text-xl' />
@@ -142,6 +144,28 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
 
       </div>
     </>
+  )
+}
+const PlanetPanel = ({ setIsZoomed ,info}) => {
+  console.log(info)
+  return (
+    <div className='absolute right-0 z-40 flex items-center justify-center h-screen w-80'>
+      <div className='w-[300px] font-bold text-white pt-[20px] bg-zinc-950 h-[70%] rounded-xl'>
+        <h2 onClick={() => { setIsZoomed(false) }} className="absolute flex items-center mb-4 text-lg font-bold cursor-pointer right-10">Volver<IoIosArrowForward className='pt-1 text-xl' /></h2>
+        <div className='flex flex-col w-full h-full p-10'>
+          <h1 className='text-xl '>{info.name == 'Tierra'?info.name + ' ( Estas aquí )' :info.name}</h1>
+          <div className='flex flex-col p-4 text-xs border-2 rounded-xl'>
+            <div>Masa: {info.mass} km</div>
+            <div>Gravedad: {info.gravity} m/s²</div>
+            <div>Temperatura: {info.temperature.surface} °C</div>
+            <div>Atmosfera: {()=>{info.atmosphere.composition.forEach((gas)=>{
+              gas.forEach((e)=>{console.log(e)})
+              
+            })}}</div>
+          </div>
+        </div>      
+      </div>
+    </div>
   )
 }
 function App() {
@@ -152,18 +176,25 @@ function App() {
   const [showAsteroidTrails, setShowAsteroidTrails] = useState(false);
   const [showFilterPanel, setShowFilterPanel] = useState(true);
   const [showLayerPanel, setShowLayerPanel] = useState(false);
-
+  const [isZoomed, setIsZoomed] = useState(false);
   const [info, setInfo] = useState(false)
   const [onPlay, setOnPlay] = useState(true)
   const [onPass, setOnPass] = useState(false)
   const [onBack, setOnBack] = useState(false)
+  const [infoPlanet, setinfoPlanet] = useState('')
   const handleFilterToggle = () => {
     setShowFilterPanel(prev => !prev);
   };
   const handleLayerToggle = () => {
     setShowLayerPanel(prev => !prev);
   };
-
+  
+  const handlePlanetClick = (name) => {
+    setIsZoomed(true);  
+    solarSystemPlanets.forEach((planet)=>{
+      if(planet.name == name){setinfoPlanet(planet)}
+    })
+  };
   return (
     <div className="relative flex w-screen h-screen overflow-hidden bg-gray-950">
 
@@ -180,7 +211,7 @@ function App() {
       <LayerPanel info={info} setInfo={setInfo} setOnBack={setOnBack} onBack={onBack} setOnPass={setOnPass} onPass={onPass} onPlay={onPlay} setOnPlay={setOnPlay} panel={showFilterPanel} showLayerPanel={showLayerPanel} setShowLayerPanel={setShowLayerPanel} />
 
       {/* Ventana lateral de filtro */}
-
+      {isZoomed && (<PlanetPanel setIsZoomed={setIsZoomed} info={infoPlanet} />)}
       {showLayerPanel && (
         <FilterPanel
           handleLayerToggle={handleLayerToggle}
@@ -201,6 +232,7 @@ function App() {
 
       {/* Componente Orrery separado para evitar re-renderizados */}
       <Orrery
+        handlePlanetClick={handlePlanetClick}
         onBack={onBack}
         onPass={onPass}
         onPlay={onPlay}
