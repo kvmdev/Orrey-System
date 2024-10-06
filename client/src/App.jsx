@@ -146,24 +146,32 @@ const LayerPanel = ({ panel, showLayerPanel, setShowLayerPanel, setOnPlay, onPla
     </>
   )
 }
-const PlanetPanel = ({ setIsZoomed ,info}) => {
+const PlanetPanel = ({ setIsZoomed, info }) => {
   console.log(info)
   return (
     <div className='absolute right-0 z-40 flex items-center justify-center h-screen w-80'>
       <div className='w-[300px] font-bold text-white pt-[20px] bg-zinc-950 h-[70%] rounded-xl'>
         <h2 onClick={() => { setIsZoomed(false) }} className="absolute flex items-center mb-4 text-lg font-bold cursor-pointer right-10">Volver<IoIosArrowForward className='pt-1 text-xl' /></h2>
         <div className='flex flex-col w-full h-full p-10'>
-          <h1 className='text-xl '>{info.name == 'Tierra'?info.name + ' ( Estas aquí )' :info.name}</h1>
+          <h1 className='text-xl '>{info.name == 'Tierra' ? info.name + ' ( Estas aquí )' : info.name}</h1>
+          <div><img src={info.image} alt="" /></div>
           <div className='flex flex-col p-4 text-xs border-2 rounded-xl'>
-            <div>Masa: {info.mass} km</div>
+            <div>Diametro: {info.meanRadius} km</div>
+            <div>Masa: {info.mass} kg</div>
             <div>Gravedad: {info.gravity} m/s²</div>
             <div>Temperatura: {info.temperature.surface} °C</div>
-            <div>Atmosfera: {()=>{info.atmosphere.composition.forEach((gas)=>{
-              gas.forEach((e)=>{console.log(e)})
-              
-            })}}</div>
+            <div>
+              <strong>Atmósfera:</strong>
+              {info.atmosphere.composition.map((gas, index) => (
+                <div className='font-extralight' key={index}>
+                  {gas.gas}: {gas.percentage}%
+                </div>
+              ))}
+            </div>
+            <div>Lunas: {info.moons}</div>
           </div>
-        </div>      
+
+        </div>
       </div>
     </div>
   )
@@ -188,11 +196,11 @@ function App() {
   const handleLayerToggle = () => {
     setShowLayerPanel(prev => !prev);
   };
-  
+
   const handlePlanetClick = (name) => {
-    setIsZoomed(true);  
-    solarSystemPlanets.forEach((planet)=>{
-      if(planet.name == name){setinfoPlanet(planet)}
+    setIsZoomed(true);
+    solarSystemPlanets.forEach((planet) => {
+      if (planet.name == name) { setinfoPlanet(planet) }
     })
   };
   return (
